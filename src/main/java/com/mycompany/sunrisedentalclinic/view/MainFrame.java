@@ -1,7 +1,16 @@
 package com.mycompany.sunrisedentalclinic.view;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 public class MainFrame extends JFrame {
 
@@ -96,7 +105,7 @@ public class MainFrame extends JFrame {
         buttonPanel.add(btnHelp);
         buttonPanel.add(btnLogout);
 
-        // Header
+        // Header panel
         JPanel headerPanel = new JPanel(
                 new GridLayout(2, 1)
         );
@@ -111,50 +120,63 @@ public class MainFrame extends JFrame {
         add(headerPanel, BorderLayout.NORTH);
         add(buttonPanel, BorderLayout.CENTER);
 
-        // Temporary button messages
+        // Register Appointment
         btnAppointment.addActionListener(e -> {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Appointment Registration module will be developed next."
-            );
+
+            AppointmentFrame appointmentFrame =
+                    new AppointmentFrame();
+
+            appointmentFrame.setVisible(true);
         });
 
+        // Search Appointment
         btnSearch.addActionListener(e -> {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Appointment Search module will be developed next."
-            );
+
+            SearchAppointmentFrame searchFrame =
+                    new SearchAppointmentFrame();
+
+            searchFrame.setVisible(true);
         });
 
+        // Patients
         btnPatients.addActionListener(e -> {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Patient Management module will be developed next."
-            );
+
+            PatientFrame patientFrame =
+                    new PatientFrame();
+
+            patientFrame.setVisible(true);
         });
 
+        // Dentists
         btnDentists.addActionListener(e -> {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Dentist Management module will be developed next."
-            );
+
+            DentistFrame dentistFrame =
+                    new DentistFrame();
+
+            dentistFrame.setVisible(true);
         });
 
+        // Treatments
         btnTreatments.addActionListener(e -> {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Treatment Management module will be developed next."
-            );
+
+            TreatmentFrame treatmentFrame =
+                    new TreatmentFrame();
+
+            treatmentFrame.setVisible(true);
         });
 
+        // Billing
         btnBilling.addActionListener(e -> {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Billing module will be developed next."
-            );
-        });
 
+    BillingFrame billingFrame =
+            new BillingFrame();
+
+    billingFrame.setVisible(true);
+});
+
+        // Help
         btnHelp.addActionListener(e -> {
+
             JOptionPane.showMessageDialog(
                     this,
                     "Sunrise Dental Clinic Help\n\n"
@@ -168,17 +190,21 @@ public class MainFrame extends JFrame {
             );
         });
 
+        // Logout
         btnLogout.addActionListener(e -> {
 
-            int choice = JOptionPane.showConfirmDialog(
-                    this,
-                    "Are you sure you want to logout?",
-                    "Logout",
-                    JOptionPane.YES_NO_OPTION
-            );
+            int choice =
+                    JOptionPane.showConfirmDialog(
+                            this,
+                            "Are you sure you want to logout?",
+                            "Logout",
+                            JOptionPane.YES_NO_OPTION
+                    );
 
             if (choice == JOptionPane.YES_OPTION) {
+
                 dispose();
+
                 new LoginFrame().setVisible(true);
             }
         });
