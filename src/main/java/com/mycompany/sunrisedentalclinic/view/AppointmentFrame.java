@@ -74,20 +74,12 @@ public class AppointmentFrame extends JFrame {
                 BorderFactory.createEmptyBorder(15, 15, 15, 15)
         );
 
-        // =========================
-        // TITLE
-        // =========================
-
         JLabel lblTitle =
                 new JLabel("APPOINTMENT REGISTRATION");
 
         lblTitle.setFont(
                 new Font("Arial", Font.BOLD, 22)
         );
-
-        // =========================
-        // FORM
-        // =========================
 
         JPanel formPanel =
                 new JPanel(new GridBagLayout());
@@ -102,8 +94,6 @@ public class AppointmentFrame extends JFrame {
                 GridBagConstraints.HORIZONTAL;
 
         gbc.weightx = 1;
-
-        // Appointment Number
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -123,8 +113,6 @@ public class AppointmentFrame extends JFrame {
                 gbc
         );
 
-        // Patient
-
         gbc.gridx = 0;
         gbc.gridy = 1;
 
@@ -142,8 +130,6 @@ public class AppointmentFrame extends JFrame {
                 cmbPatient,
                 gbc
         );
-
-        // Dentist
 
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -163,8 +149,6 @@ public class AppointmentFrame extends JFrame {
                 gbc
         );
 
-        // Treatment
-
         gbc.gridx = 0;
         gbc.gridy = 3;
 
@@ -182,8 +166,6 @@ public class AppointmentFrame extends JFrame {
                 cmbTreatment,
                 gbc
         );
-
-        // Date
 
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -207,8 +189,6 @@ public class AppointmentFrame extends JFrame {
                 gbc
         );
 
-        // Time
-
         gbc.gridx = 0;
         gbc.gridy = 5;
 
@@ -230,8 +210,6 @@ public class AppointmentFrame extends JFrame {
                 txtTime,
                 gbc
         );
-
-        // Status
 
         gbc.gridx = 0;
         gbc.gridy = 6;
@@ -257,8 +235,6 @@ public class AppointmentFrame extends JFrame {
                 gbc
         );
 
-        // Notes
-
         gbc.gridx = 0;
         gbc.gridy = 7;
 
@@ -283,10 +259,6 @@ public class AppointmentFrame extends JFrame {
                 gbc
         );
 
-        // =========================
-        // BUTTONS
-        // =========================
-
         JPanel buttonPanel =
                 new JPanel(new FlowLayout());
 
@@ -303,10 +275,6 @@ public class AppointmentFrame extends JFrame {
         buttonPanel.add(btnClear);
         buttonPanel.add(btnClose);
 
-        // =========================
-        // TABLE
-        // =========================
-
         tableModel =
                 new DefaultTableModel(
                         new Object[]{
@@ -320,12 +288,10 @@ public class AppointmentFrame extends JFrame {
                         },
                         0
                 ) {
-
                     @Override
                     public boolean isCellEditable(
                             int row,
                             int column) {
-
                         return false;
                     }
                 };
@@ -335,10 +301,6 @@ public class AppointmentFrame extends JFrame {
 
         JScrollPane tableScroll =
                 new JScrollPane(appointmentTable);
-
-        // =========================
-        // TOP PANEL
-        // =========================
 
         JPanel topPanel =
                 new JPanel(new BorderLayout());
@@ -358,10 +320,6 @@ public class AppointmentFrame extends JFrame {
                 BorderLayout.SOUTH
         );
 
-        // =========================
-        // MAIN
-        // =========================
-
         mainPanel.add(
                 topPanel,
                 BorderLayout.NORTH
@@ -373,10 +331,6 @@ public class AppointmentFrame extends JFrame {
         );
 
         add(mainPanel);
-
-        // =========================
-        // EVENTS
-        // =========================
 
         btnRegister.addActionListener(
                 e -> registerAppointment()
@@ -391,74 +345,85 @@ public class AppointmentFrame extends JFrame {
         );
     }
 
-    // =========================
-    // LOAD PATIENTS
-    // =========================
-
     private void loadPatients() {
 
         cmbPatient.removeAllItems();
 
-        List<Patient> patients =
-                patientDAO.getAllPatients();
+        try {
 
-        for (Patient patient : patients) {
+            List<Patient> patients =
+                    patientDAO.getAllPatients();
 
-            cmbPatient.addItem(
-                    new PatientItem(patient)
+            for (Patient patient : patients) {
+
+                cmbPatient.addItem(
+                        new PatientItem(patient)
+                );
+            }
+
+        } catch (Exception ex) {
+
+            showError(
+                    "Unable to load patient information."
             );
         }
     }
-
-    // =========================
-    // LOAD DENTISTS
-    // =========================
 
     private void loadDentists() {
 
         cmbDentist.removeAllItems();
 
-        List<Dentist> dentists =
-                dentistDAO.getAllDentists();
+        try {
 
-        for (Dentist dentist : dentists) {
+            List<Dentist> dentists =
+                    dentistDAO.getAllDentists();
 
-            if ("ACTIVE".equalsIgnoreCase(
-                    dentist.getStatus())) {
+            for (Dentist dentist : dentists) {
 
-                cmbDentist.addItem(
-                        new DentistItem(dentist)
-                );
+                if ("ACTIVE".equalsIgnoreCase(
+                        dentist.getStatus())) {
+
+                    cmbDentist.addItem(
+                            new DentistItem(dentist)
+                    );
+                }
             }
+
+        } catch (Exception ex) {
+
+            showError(
+                    "Unable to load dentist information."
+            );
         }
     }
-
-    // =========================
-    // LOAD TREATMENTS
-    // =========================
 
     private void loadTreatments() {
 
         cmbTreatment.removeAllItems();
 
-        List<Treatment> treatments =
-                treatmentDAO.getAllTreatments();
+        try {
 
-        for (Treatment treatment : treatments) {
+            List<Treatment> treatments =
+                    treatmentDAO.getAllTreatments();
 
-            if ("ACTIVE".equalsIgnoreCase(
-                    treatment.getStatus())) {
+            for (Treatment treatment : treatments) {
 
-                cmbTreatment.addItem(
-                        new TreatmentItem(treatment)
-                );
+                if ("ACTIVE".equalsIgnoreCase(
+                        treatment.getStatus())) {
+
+                    cmbTreatment.addItem(
+                            new TreatmentItem(treatment)
+                    );
+                }
             }
+
+        } catch (Exception ex) {
+
+            showError(
+                    "Unable to load treatment information."
+            );
         }
     }
-
-    // =========================
-    // REGISTER
-    // =========================
 
     private void registerAppointment() {
 
@@ -479,11 +444,8 @@ public class AppointmentFrame extends JFrame {
                 dentistItem == null ||
                 treatmentItem == null) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Please select a patient, dentist and treatment.",
-                    "Validation Error",
-                    JOptionPane.WARNING_MESSAGE
+            showWarning(
+                    "Please select a patient, dentist and treatment."
             );
 
             return;
@@ -492,24 +454,19 @@ public class AppointmentFrame extends JFrame {
         String appointmentNumber =
                 txtAppointmentNumber.getText().trim();
 
-        // Duplicate check
-
-        if (appointmentDAO.appointmentNumberExists(
-                appointmentNumber)) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Appointment number already exists.",
-                    "Duplicate Appointment",
-                    JOptionPane.WARNING_MESSAGE
-            );
-
-            txtAppointmentNumber.requestFocus();
-
-            return;
-        }
-
         try {
+
+            if (appointmentDAO.appointmentNumberExists(
+                    appointmentNumber)) {
+
+                showWarning(
+                        "Appointment number already exists."
+                );
+
+                txtAppointmentNumber.requestFocus();
+
+                return;
+            }
 
             LocalDate appointmentDate =
                     LocalDate.parse(
@@ -554,32 +511,24 @@ public class AppointmentFrame extends JFrame {
 
             } else {
 
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Unable to register appointment.",
-                        "Database Error",
-                        JOptionPane.ERROR_MESSAGE
+                showError(
+                        "Unable to register appointment."
                 );
             }
 
         } catch (DateTimeParseException ex) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Please enter a valid date and time.\n\n"
-                    + "Date format: yyyy-MM-dd\n"
-                    + "Example: 2026-09-10\n\n"
-                    + "Time format: HH:mm\n"
-                    + "Example: 14:30",
-                    "Invalid Date or Time",
-                    JOptionPane.WARNING_MESSAGE
+            showWarning(
+                    "Please enter a valid date or time."
+            );
+
+        } catch (Exception ex) {
+
+            showError(
+                    "An unexpected error occurred while registering the appointment."
             );
         }
     }
-
-    // =========================
-    // VALIDATION
-    // =========================
 
     private boolean validateFields() {
 
@@ -594,11 +543,8 @@ public class AppointmentFrame extends JFrame {
 
         if (appointmentNumber.isEmpty()) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Appointment number is required.",
-                    "Validation Error",
-                    JOptionPane.WARNING_MESSAGE
+            showWarning(
+                    "Appointment number is required."
             );
 
             txtAppointmentNumber.requestFocus();
@@ -608,11 +554,19 @@ public class AppointmentFrame extends JFrame {
 
         if (appointmentNumber.length() > 20) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Appointment number cannot exceed 20 characters.",
-                    "Validation Error",
-                    JOptionPane.WARNING_MESSAGE
+            showWarning(
+                    "Appointment number cannot exceed 20 characters."
+            );
+
+            txtAppointmentNumber.requestFocus();
+
+            return false;
+        }
+
+        if (!appointmentNumber.matches("[A-Za-z0-9-]+")) {
+
+            showWarning(
+                    "Appointment number can contain only letters, numbers and hyphens."
             );
 
             txtAppointmentNumber.requestFocus();
@@ -622,11 +576,8 @@ public class AppointmentFrame extends JFrame {
 
         if (cmbPatient.getSelectedItem() == null) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Please select a patient.",
-                    "Validation Error",
-                    JOptionPane.WARNING_MESSAGE
+            showWarning(
+                    "Please select a patient."
             );
 
             return false;
@@ -634,11 +585,8 @@ public class AppointmentFrame extends JFrame {
 
         if (cmbDentist.getSelectedItem() == null) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Please select a dentist.",
-                    "Validation Error",
-                    JOptionPane.WARNING_MESSAGE
+            showWarning(
+                    "Please select a dentist."
             );
 
             return false;
@@ -646,11 +594,8 @@ public class AppointmentFrame extends JFrame {
 
         if (cmbTreatment.getSelectedItem() == null) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Please select a treatment.",
-                    "Validation Error",
-                    JOptionPane.WARNING_MESSAGE
+            showWarning(
+                    "Please select a treatment."
             );
 
             return false;
@@ -658,11 +603,8 @@ public class AppointmentFrame extends JFrame {
 
         if (date.isEmpty()) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Appointment date is required.",
-                    "Validation Error",
-                    JOptionPane.WARNING_MESSAGE
+            showWarning(
+                    "Appointment date is required."
             );
 
             txtDate.requestFocus();
@@ -672,11 +614,8 @@ public class AppointmentFrame extends JFrame {
 
         if (time.isEmpty()) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Appointment time is required.",
-                    "Validation Error",
-                    JOptionPane.WARNING_MESSAGE
+            showWarning(
+                    "Appointment time is required."
             );
 
             txtTime.requestFocus();
@@ -684,20 +623,20 @@ public class AppointmentFrame extends JFrame {
             return false;
         }
 
+        LocalDate appointmentDate;
+
         try {
 
-            LocalDate.parse(
-                    date,
-                    dateFormatter
-            );
+            appointmentDate =
+                    LocalDate.parse(
+                            date,
+                            dateFormatter
+                    );
 
         } catch (DateTimeParseException ex) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Invalid date.\nUse format: yyyy-MM-dd",
-                    "Validation Error",
-                    JOptionPane.WARNING_MESSAGE
+            showWarning(
+                    "Invalid date. Use the format yyyy-MM-dd."
             );
 
             txtDate.requestFocus();
@@ -705,20 +644,49 @@ public class AppointmentFrame extends JFrame {
             return false;
         }
 
+        if (appointmentDate.isBefore(LocalDate.now())) {
+
+            showWarning(
+                    "Appointment date cannot be in the past."
+            );
+
+            txtDate.requestFocus();
+
+            return false;
+        }
+
+        LocalTime appointmentTime;
+
         try {
 
-            LocalTime.parse(
-                    time,
-                    timeFormatter
-            );
+            appointmentTime =
+                    LocalTime.parse(
+                            time,
+                            timeFormatter
+                    );
 
         } catch (DateTimeParseException ex) {
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Invalid time.\nUse format: HH:mm",
-                    "Validation Error",
-                    JOptionPane.WARNING_MESSAGE
+            showWarning(
+                    "Invalid time. Use the format HH:mm."
+            );
+
+            txtTime.requestFocus();
+
+            return false;
+        }
+
+        LocalTime openingTime =
+                LocalTime.of(8, 0);
+
+        LocalTime closingTime =
+                LocalTime.of(18, 0);
+
+        if (appointmentTime.isBefore(openingTime) ||
+                appointmentTime.isAfter(closingTime)) {
+
+            showWarning(
+                    "Appointment time must be between 08:00 and 18:00."
             );
 
             txtTime.requestFocus();
@@ -729,46 +697,44 @@ public class AppointmentFrame extends JFrame {
         return true;
     }
 
-    // =========================
-    // LOAD APPOINTMENTS
-    // =========================
-
     private void loadAppointments() {
 
         tableModel.setRowCount(0);
 
-        List<Appointment> appointments =
-                appointmentDAO.getAllAppointments();
+        try {
 
-        for (Appointment appointment :
-                appointments) {
+            List<Appointment> appointments =
+                    appointmentDAO.getAllAppointments();
 
-            tableModel.addRow(
-                    new Object[]{
-                            appointment.getAppointmentNumber(),
-                            appointment.getPatientId(),
-                            appointment.getDentistId(),
-                            appointment.getTreatmentId(),
-                            appointment.getAppointmentDate(),
-                            appointment.getAppointmentTime(),
-                            appointment.getStatus()
-                    }
+            for (Appointment appointment :
+                    appointments) {
+
+                tableModel.addRow(
+                        new Object[]{
+                                appointment.getAppointmentNumber(),
+                                appointment.getPatientId(),
+                                appointment.getDentistId(),
+                                appointment.getTreatmentId(),
+                                appointment.getAppointmentDate(),
+                                appointment.getAppointmentTime(),
+                                appointment.getStatus()
+                        }
+                );
+            }
+
+        } catch (Exception ex) {
+
+            showError(
+                    "Unable to load appointments."
             );
         }
     }
 
-    // =========================
-    // CLEAR
-    // =========================
-
     private void clearFields() {
 
         txtAppointmentNumber.setText("");
-
         txtDate.setText("");
-
         txtTime.setText("");
-
         txtNotes.setText("");
 
         cmbStatus.setSelectedItem(
@@ -790,9 +756,25 @@ public class AppointmentFrame extends JFrame {
         txtAppointmentNumber.requestFocus();
     }
 
-    // =========================
-    // PATIENT ITEM
-    // =========================
+    private void showWarning(String message) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                message,
+                "Validation Error",
+                JOptionPane.WARNING_MESSAGE
+        );
+    }
+
+    private void showError(String message) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                message,
+                "System Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+    }
 
     private static class PatientItem {
 
@@ -811,10 +793,6 @@ public class AppointmentFrame extends JFrame {
         }
     }
 
-    // =========================
-    // DENTIST ITEM
-    // =========================
-
     private static class DentistItem {
 
         private Dentist dentist;
@@ -831,10 +809,6 @@ public class AppointmentFrame extends JFrame {
                     + dentist.getDentistName();
         }
     }
-
-    // =========================
-    // TREATMENT ITEM
-    // =========================
 
     private static class TreatmentItem {
 
@@ -856,3 +830,4 @@ public class AppointmentFrame extends JFrame {
         }
     }
 }
+
